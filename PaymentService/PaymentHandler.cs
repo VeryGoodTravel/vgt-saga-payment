@@ -48,6 +48,8 @@ public class PaymentHandler
     /// </summary>
     public CancellationToken Token { get; } = new();
 
+    private SemaphoreSlim _concurencySemaphore = new SemaphoreSlim(6, 6);
+
     /// <summary>
     /// Default constructor of the order handler class
     /// that handles data and prepares messages concerning saga orders beginning, end and failure
@@ -74,6 +76,8 @@ public class PaymentHandler
         {
             var message = await Requests.Reader.ReadAsync(Token);
 
+            await _concurencySemaphore.WaitAsync(Token);
+            
             _ = Task.Run(() => Payment(message), Token);
         }
     }
@@ -95,5 +99,7 @@ public class PaymentHandler
         message.CreationDate = DateTime.Now;
         
         await Publish.Writer.WriteAsync(CurrentRequest, Token);
+
+        _concurencySemaphore.Release();
     }
 }

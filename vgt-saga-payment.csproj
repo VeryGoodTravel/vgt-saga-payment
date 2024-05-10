@@ -40,7 +40,7 @@
         <_ContentIncludedByDefault Remove="vgt-saga-payment\appsettings.json"/>
         <_ContentIncludedByDefault Remove="vgt-saga-payment\obj\project.assets.json"/>
         <_ContentIncludedByDefault Remove="vgt-saga-payment\obj\project.packagespec.json"/>
-        <_ContentIncludedByDefault Remove="vgt-saga-payment\obj\vgt-saga-order.csproj.nuget.dgspec.json"/>
+        <_ContentIncludedByDefault Remove="vgt-saga-payment\obj\vgt-saga-payment.csproj.nuget.dgspec.json"/>
         <_ContentIncludedByDefault Remove="vgt-saga-payment\Properties\launchSettings.json"/>
     </ItemGroup>
 
