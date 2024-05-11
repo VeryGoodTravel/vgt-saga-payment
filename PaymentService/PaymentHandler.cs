@@ -1,7 +1,4 @@
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
-using NEventStore;
 using NLog;
 using vgt_saga_serialization;
 using vgt_saga_serialization.MessageBodies;

@@ -11,14 +11,9 @@
             Handles the data in messages
             </summary>
         </member>
-        <member name="P:vgt_saga_payment.PaymentService.PaymentHandler.Replies">
-            <summary>
-            Replies received from the orchestrator
-            </summary>
-        </member>
         <member name="P:vgt_saga_payment.PaymentService.PaymentHandler.Requests">
             <summary>
-            Requests to the orchestrator
+            Requests from the orchestrator
             </summary>
         </member>
         <member name="P:vgt_saga_payment.PaymentService.PaymentHandler.Publish">
@@ -41,23 +36,17 @@
             Task of the requests handler
             </summary>
         </member>
-        <member name="P:vgt_saga_payment.PaymentService.PaymentHandler.RepliesTask">
-            <summary>
-            Task of the Replies handler
-            </summary>
-        </member>
         <member name="P:vgt_saga_payment.PaymentService.PaymentHandler.Token">
             <summary>
             Token allowing tasks cancellation from the outside of the class
             </summary>
         </member>
-        <member name="M:vgt_saga_payment.PaymentService.PaymentHandler.#ctor(System.Threading.Channels.Channel{vgt_saga_serialization.Message},System.Threading.Channels.Channel{vgt_saga_serialization.Message},System.Threading.Channels.Channel{vgt_saga_serialization.Message},NEventStore.IStoreEvents,NLog.Logger)">
+        <member name="M:vgt_saga_payment.PaymentService.PaymentHandler.#ctor(System.Threading.Channels.Channel{vgt_saga_serialization.Message},System.Threading.Channels.Channel{vgt_saga_serialization.Message},System.Int32,System.Int32,NLog.Logger)">
             <summary>
             Default constructor of the order handler class
             that handles data and prepares messages concerning saga orders beginning, end and failure
             </summary>
-            <param name="replies"> Queue with the replies from the orchestrator </param>
-            <param name="requests"> Queue with the requests to the orchestrator </param>
+            <param name="requests"> Queue with the requests from the orchestrator </param>
             <param name="publish"> Queue with messages that need to be published to RabbitMQ </param>
             <param name="eventStore"> EventStore for the event sourcing and CQRS </param>
             <param name="log"> logger to log to </param>
@@ -103,13 +92,6 @@
             </summary>
             <param name="body"> json body of the message to send </param>
         </member>
-        <member name="M:vgt_saga_payment.PaymentService.PaymentQueueHandler.PublishToBackend(System.String)">
-            <summary>
-            Publish the message to Backend exchange
-            answers requests from the backend
-            </summary>
-            <param name="body"> json body of the message to send </param>
-        </member>
         <member name="M:vgt_saga_payment.PaymentService.PaymentQueueHandler.PublishTagResponse(RabbitMQ.Client.Events.BasicDeliverEventArgs,System.Boolean)">
             <summary>
             Handles RabbitMQ message tag and posts the acceptance or rejection,
@@ -117,20 +99,7 @@
             <param name="ea"> tag to answer </param>
             <param name="state"> ack/reject </param>
         </member>
-        <member name="M:vgt_saga_payment.PaymentService.PaymentQueueHandler.PublishBackendTagResponse(RabbitMQ.Client.Events.BasicDeliverEventArgs,System.Boolean)">
-            <summary>
-            Handles RabbitMQ message tag and posts the acceptance or rejection,
-            </summary>
-            <param name="ea"> tag to answer </param>
-            <param name="state"> ack/reject </param>
-        </member>
         <member name="M:vgt_saga_payment.PaymentService.PaymentQueueHandler.AddRepliesConsumer(System.EventHandler{RabbitMQ.Client.Events.BasicDeliverEventArgs})">
-            <summary>
-            Create queue consumer and hook to the event specifying incoming requests.
-            </summary>
-            <param name="handler"> handler to assign to the consumer event </param>
-        </member>
-        <member name="M:vgt_saga_payment.PaymentService.PaymentQueueHandler.AddBackendConsumer(System.EventHandler{RabbitMQ.Client.Events.BasicDeliverEventArgs})">
             <summary>
             Create queue consumer and hook to the event specifying incoming requests.
             </summary>
@@ -168,8 +137,8 @@
         </member>
         <member name="T:vgt_saga_payment.PaymentService.PaymentService">
             <summary>
-            Saga Orchestrator;
-            handles all saga transactions of user orders.
+            Saga Payment service;
+            handles all payments in the transaction.
             </summary>
         </member>
         <member name="P:vgt_saga_payment.PaymentService.PaymentService.Token">
@@ -202,20 +171,6 @@
             </summary>
             <param name="sender"></param>
             <param name="ea"></param>
-        </member>
-        <member name="M:vgt_saga_payment.PaymentService.PaymentService.BackendOrdersEventHandler(System.Object,RabbitMQ.Client.Events.BasicDeliverEventArgs)">
-            <summary>
-            Event Handler that hooks to the event of the queue consumer.
-            Handles incoming replies from the RabbitMQ and routes them to the appropriate tasks.
-            </summary>
-            <param name="sender"></param>
-            <param name="ea"></param>
-        </member>
-        <member name="M:vgt_saga_payment.PaymentService.PaymentService.CreateChannels">
-            <summary>
-            Creates async channels to send received messages with to the tasks handling them.
-            Channels are stored in the dictionary MessageType - Channel
-            </summary>
         </member>
         <member name="M:vgt_saga_payment.PaymentService.PaymentService.Dispose">
             <inheritdoc/>

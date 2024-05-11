@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using NEventStore;
-using NEventStore.Serialization.Json;
 using NLog;
-using Npgsql;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using vgt_saga_serialization;
