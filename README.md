@@ -23,9 +23,6 @@ To update those submodules in the local branch run:
 - RABBIT_PASSWORD -> User password to log in with.
 - RABBIT_REPLIES -> Queue of the replies sent back to the orchestrator.
 - RABBIT_PAYMENT -> Queue of the requests sent by the orchestrator to the payment gate service.
-- DB_SERVER -> Database server name to use
-- DB_NAME_PAYM -> Database name to use for the payment service
-- DB_PASSWORD -> Database password to use for the database server
 - PAYMENT_MIN_DELAY -> Minimum value (in seconds) random delay uses, defaults to 0
 - PAYMENT_MAX_DELAY -> Maximum value (in seconds) random delay uses, defaults to 100
 

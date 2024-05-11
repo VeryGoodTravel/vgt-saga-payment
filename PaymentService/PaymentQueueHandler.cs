@@ -33,7 +33,6 @@ namespace vgt_saga_payment.PaymentService;
 public class PaymentQueueHandler : IDisposable
 {
     private const string LoggerPrefix = "OrderQueue| ";
-    private readonly ConnectionFactory _factory;
     private readonly IConnection _connection;
     private readonly Logger _logger;
 
@@ -62,8 +61,8 @@ public class PaymentQueueHandler : IDisposable
         _logger.Debug("{p}Initializing RabbitMq connections", LoggerPrefix);
         try
         {
-            _factory = GetConnectionFactoryFromConfig(config);
-            _connection = _factory.CreateConnection();
+            var factory = GetConnectionFactoryFromConfig(config);
+            _connection = factory.CreateConnection();
         }
         catch (BrokerUnreachableException e)
         {

@@ -25,7 +25,6 @@ public class PaymentService : IDisposable
     private readonly Logger _logger;
     private readonly IConfiguration _config;
     private readonly Utils _jsonUtils;
-    private readonly IStoreEvents _eventStore;
     
     private readonly Channel<Message> _payments;
     private readonly Channel<Message> _publish;
@@ -58,22 +57,11 @@ public class PaymentService : IDisposable
         _jsonUtils = new Utils(_logger);
         _payments = Channel.CreateUnbounded<Message>(new UnboundedChannelOptions()
             { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true });
-        
-        var connStr = SecretUtils.GetConnectionString(_config, "DB_NAME_PAYM", _logger);
-        
-        _eventStore = Wireup.Init()
-            .WithLoggerFactory(lf)
-            .UsingInMemoryPersistence()
-            .UsingSqlPersistence(NpgsqlFactory.Instance, connStr)
-            .InitializeStorageEngine()
-            .UsingJsonSerialization()
-            .Compress()
-            .Build();
 
         _publish = Channel.CreateUnbounded<Message>(new UnboundedChannelOptions()
             { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true });
         
-        _paymentHandler = new PaymentHandler(_payments, _publish, _eventStore, minDelay, maxDelay, _logger);
+        _paymentHandler = new PaymentHandler(_payments, _publish, minDelay, maxDelay, _logger);
 
         _queues = new PaymentQueueHandler(_config, _logger);
         

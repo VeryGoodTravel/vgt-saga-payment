@@ -12,13 +12,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4"/>
-        <PackageReference Include="NEventStore" Version="9.1.1" />
-        <PackageReference Include="NEventStore.Persistence.Sql" Version="9.2.0" />
-        <PackageReference Include="NEventStore.Serialization.Json" Version="9.1.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Npgsql" Version="8.0.3" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
-        <PackageReference Include="Npgsql.Json.NET" Version="8.0.3" />
         <PackageReference Include="RabbitMQ.Client" Version="6.8.1"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>

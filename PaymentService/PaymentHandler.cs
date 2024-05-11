@@ -36,8 +36,6 @@ public class PaymentHandler
     public Message CurrentReply { get; set; }
     private Logger _logger;
     
-    private IStoreEvents EventStore { get; }
-    
     /// <summary>
     /// Task of the requests handler
     /// </summary>
@@ -61,12 +59,11 @@ public class PaymentHandler
     /// <param name="publish"> Queue with messages that need to be published to RabbitMQ </param>
     /// <param name="eventStore"> EventStore for the event sourcing and CQRS </param>
     /// <param name="log"> logger to log to </param>
-    public PaymentHandler(Channel<Message> requests, Channel<Message> publish, IStoreEvents eventStore, int min, int max, Logger log)
+    public PaymentHandler(Channel<Message> requests, Channel<Message> publish, int min, int max, Logger log)
     {
         _logger = log;
         Requests = requests;
         Publish = publish;
-        EventStore = eventStore;
         _minDelay = min;
         _maxDelay = max;
 
