@@ -16,23 +16,14 @@ public class PaymentHandler
     /// Requests from the orchestrator
     /// </summary>
     public Channel<Message> Requests { get; }
-    
+
     /// <summary>
     /// Messages that need to be sent out to the queues
     /// </summary>
     public Channel<Message> Publish { get; }
-    
-    /// <summary>
-    /// current request handled
-    /// </summary>
-    public Message CurrentRequest { get; set; }
-    
-    /// <summary>
-    /// current reply handled
-    /// </summary>
-    public Message CurrentReply { get; set; }
+
     private Logger _logger;
-    
+
     /// <summary>
     /// Task of the requests handler
     /// </summary>
@@ -54,8 +45,9 @@ public class PaymentHandler
     /// </summary>
     /// <param name="requests"> Queue with the requests from the orchestrator </param>
     /// <param name="publish"> Queue with messages that need to be published to RabbitMQ </param>
-    /// <param name="eventStore"> EventStore for the event sourcing and CQRS </param>
+    /// <param name="max"> maximum delay time of the payment in seconds </param>
     /// <param name="log"> logger to log to </param>
+    /// <param name="min"> minimum delay time of the payment in seconds</param>
     public PaymentHandler(Channel<Message> requests, Channel<Message> publish, int min, int max, Logger log)
     {
         _logger = log;
@@ -76,7 +68,7 @@ public class PaymentHandler
             var message = await Requests.Reader.ReadAsync(Token);
 
             await _concurencySemaphore.WaitAsync(Token);
-            
+
             _ = Task.Run(() => Payment(message), Token);
         }
     }
@@ -84,20 +76,20 @@ public class PaymentHandler
     private async Task Payment(Message message)
     {
         var rnd = new Random();
-        await Task.Delay(rnd.Next(_minDelay, _maxDelay)*1000, Token);
+        await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
         var result = rnd.Next(0, 1) switch
         {
             1 => SagaState.PaymentAccept,
             _ => SagaState.PaymentFailed
         };
-        
+
         message.MessageType = MessageType.PaymentReply;
         message.MessageId += 1;
         message.State = result;
         message.Body = new PaymentReply();
         message.CreationDate = DateTime.Now;
-        
-        await Publish.Writer.WriteAsync(CurrentRequest, Token);
+
+        await Publish.Writer.WriteAsync(message, Token);
 
         _concurencySemaphore.Release();
     }
