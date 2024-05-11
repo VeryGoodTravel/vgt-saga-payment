@@ -52,6 +52,9 @@ public class PaymentService : IDisposable
         _logger = LogManager.GetCurrentClassLogger();
         _config = config;
 
+        var minDelay = config.GetValue<int>("PAYMENT_MIN_DELAY", 0);
+        var maxDelay = config.GetValue<int>("PAYMENT_MAX_DELAY", 100);
+
         _jsonUtils = new Utils(_logger);
         _payments = Channel.CreateUnbounded<Message>(new UnboundedChannelOptions()
             { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true });
@@ -70,7 +73,7 @@ public class PaymentService : IDisposable
         _publish = Channel.CreateUnbounded<Message>(new UnboundedChannelOptions()
             { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true });
         
-        _paymentHandler = new PaymentHandler(_payments, _publish, _eventStore, _logger);
+        _paymentHandler = new PaymentHandler(_payments, _publish, _eventStore, minDelay, maxDelay, _logger);
 
         _queues = new PaymentQueueHandler(_config, _logger);
         

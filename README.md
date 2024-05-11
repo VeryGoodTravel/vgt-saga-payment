@@ -2,6 +2,8 @@
 
 Main repository of the payment service.
 
+Handles up to 10 concurrent payments
+
 ## Repository
 
 This repository contains additional submodules containing shared libraries of the SAGA microservices implementations.
@@ -24,6 +26,8 @@ To update those submodules in the local branch run:
 - DB_SERVER -> Database server name to use
 - DB_NAME_PAYM -> Database name to use for the payment service
 - DB_PASSWORD -> Database password to use for the database server
+- PAYMENT_MIN_DELAY -> Minimum value (in seconds) random delay uses, defaults to 0
+- PAYMENT_MAX_DELAY -> Maximum value (in seconds) random delay uses, defaults to 100
 
 ## Implementation documentation
 XML docs of the project available in the repository in the

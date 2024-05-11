@@ -48,7 +48,10 @@ public class PaymentHandler
     /// </summary>
     public CancellationToken Token { get; } = new();
 
-    private SemaphoreSlim _concurencySemaphore = new SemaphoreSlim(6, 6);
+    private SemaphoreSlim _concurencySemaphore = new SemaphoreSlim(10, 10);
+
+    private readonly int _minDelay;
+    private readonly int _maxDelay;
 
     /// <summary>
     /// Default constructor of the order handler class
@@ -58,12 +61,14 @@ public class PaymentHandler
     /// <param name="publish"> Queue with messages that need to be published to RabbitMQ </param>
     /// <param name="eventStore"> EventStore for the event sourcing and CQRS </param>
     /// <param name="log"> logger to log to </param>
-    public PaymentHandler(Channel<Message> requests, Channel<Message> publish, IStoreEvents eventStore, Logger log)
+    public PaymentHandler(Channel<Message> requests, Channel<Message> publish, IStoreEvents eventStore, int min, int max, Logger log)
     {
         _logger = log;
         Requests = requests;
         Publish = publish;
         EventStore = eventStore;
+        _minDelay = min;
+        _maxDelay = max;
 
         _logger.Debug("Starting tasks handling the messages");
         RequestsTask = Task.Run(HandlePayments);
@@ -85,7 +90,7 @@ public class PaymentHandler
     private async Task Payment(Message message)
     {
         var rnd = new Random();
-        await Task.Delay(rnd.Next(0, 100), Token);
+        await Task.Delay(rnd.Next(_minDelay, _maxDelay)*1000, Token);
         var result = rnd.Next(0, 1) switch
         {
             1 => SagaState.PaymentAccept,
