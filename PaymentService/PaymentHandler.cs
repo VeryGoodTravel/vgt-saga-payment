@@ -87,7 +87,6 @@ public class PaymentHandler
         message.MessageId += 1;
         message.State = result;
         message.Body = new PaymentReply();
-        message.CreationDate = DateTime.Now;
 
         await Publish.Writer.WriteAsync(message, Token);
 
