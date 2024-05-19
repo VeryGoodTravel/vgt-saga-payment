@@ -2,7 +2,7 @@
 
 Main repository of the payment service.
 
-Handles up to 10 concurrent payments
+Handles up to 10 concurrent payments and gives true/false answers randomly in random time.
 
 ## Repository
 
