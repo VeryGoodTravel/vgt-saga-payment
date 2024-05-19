@@ -122,6 +122,9 @@ void GracefulExit(WebApplication wA, ILogger log, List<IDisposable?> toDispose)
     }
 
     LogManager.Shutdown();
+    
+    throw new Exception("Kill the rest of the app");
+    
     Environment.Exit(0);
     throw new Exception("Kill the rest of the app");
 }
