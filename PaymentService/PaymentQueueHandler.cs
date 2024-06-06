@@ -132,6 +132,9 @@ public class PaymentQueueHandler : IDisposable
         _logger.Debug("{p}Added Replies consumer", LoggerPrefix);
         _consumer.Received += handler;
         _logger.Debug("{p}Added Replies event handler", LoggerPrefix);
+        _sagaFromOrchestrator.BasicConsume(queue: _queueNames[1],
+            autoAck: false,
+            consumer: _consumer);
     }
 
     /// <summary>
