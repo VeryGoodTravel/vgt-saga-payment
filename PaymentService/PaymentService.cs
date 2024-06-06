@@ -20,7 +20,7 @@ public class PaymentService : IDisposable
     private readonly Channel<Message> _payments;
     private readonly Channel<Message> _publish;
     private readonly PaymentHandler _paymentHandler;
-    
+    private Task Publisher { get; set; }
     /// <summary>
     /// Allows tasks cancellation from the outside of the class
     /// </summary>
@@ -51,6 +51,7 @@ public class PaymentService : IDisposable
 
         _publish = Channel.CreateUnbounded<Message>(new UnboundedChannelOptions()
             { SingleReader = true, SingleWriter = true, AllowSynchronousContinuations = true });
+        Publisher = Task.Run(() => RabbitPublisher());
         
         _paymentHandler = new PaymentHandler(_payments, _publish, minDelay, maxDelay, _logger);
 
