@@ -81,7 +81,7 @@ public class PaymentHandler
         if (delayRoll == 0) await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
 
         var resultRoll = rnd.Next(0, 3);
-        _logger.Debug($"Randomizing result: {delayRoll}");
+        _logger.Debug($"Randomizing result: {resultRoll}");
         SagaState result = resultRoll switch
         {
             0 => SagaState.PaymentFailed,
