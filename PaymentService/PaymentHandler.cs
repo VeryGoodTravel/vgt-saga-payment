@@ -76,7 +76,8 @@ public class PaymentHandler
     private async Task Payment(Message message)
     {
         var rnd = new Random();
-        await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
+        if (rnd.Next(0, 3) == 0) await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
+        
         var result = rnd.Next(0, 2) switch
         {
             0 => SagaState.PaymentFailed,
