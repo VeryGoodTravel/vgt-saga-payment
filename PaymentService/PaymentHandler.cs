@@ -77,10 +77,11 @@ public class PaymentHandler
     {
         var rnd = new Random();
         await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
-        var result = rnd.Next(0, 1) switch
+        var result = rnd.Next(0, 2) switch
         {
-            1 => SagaState.PaymentAccept,
-            _ => SagaState.PaymentFailed
+            0 => SagaState.PaymentFailed,
+            _ => SagaState.PaymentAccept
+            
         };
 
         message.MessageType = MessageType.PaymentReply;
