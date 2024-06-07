@@ -81,6 +81,8 @@ public class PaymentHandler
         var result = rnd.Next(0, 2) switch
         {
             0 => SagaState.PaymentFailed,
+            1 => SagaState.PaymentAccept,
+            2 => SagaState.PaymentAccept,
             _ => SagaState.PaymentAccept
             
         };
