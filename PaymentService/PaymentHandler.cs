@@ -76,9 +76,13 @@ public class PaymentHandler
     private async Task Payment(Message message)
     {
         var rnd = new Random();
-        if (rnd.Next(0, 3) == 0) await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
-        
-        var result = rnd.Next(0, 2) switch
+        var delayRoll = rnd.Next(0, 3);
+        _logger.Debug($"Randomizing delay: {delayRoll}");
+        if (delayRoll == 0) await Task.Delay(rnd.Next(_minDelay, _maxDelay) * 1000, Token);
+
+        var resultRoll = rnd.Next(0, 3);
+        _logger.Debug($"Randomizing result: {delayRoll}");
+        SagaState result = resultRoll switch
         {
             0 => SagaState.PaymentFailed,
             1 => SagaState.PaymentAccept,
@@ -86,11 +90,13 @@ public class PaymentHandler
             _ => SagaState.PaymentAccept
             
         };
+        _logger.Debug($"State result: {result}");
 
         message.MessageType = MessageType.PaymentReply;
         message.MessageId += 1;
         message.State = result;
         message.Body = new PaymentReply();
+        _logger.Debug($"Payment finished message: {message}");
 
         await Publish.Writer.WriteAsync(message, Token);
 
