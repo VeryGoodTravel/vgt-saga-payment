@@ -43,7 +43,7 @@ public class PaymentService : IDisposable
         _config = config;
 
         var minDelay = config.GetValue<int>("PAYMENT_MIN_DELAY", 0);
-        var maxDelay = config.GetValue<int>("PAYMENT_MAX_DELAY", 60);
+        var maxDelay = config.GetValue<int>("PAYMENT_MAX_DELAY", 70);
 
         _jsonUtils = new Utils(_logger);
         _payments = Channel.CreateUnbounded<Message>(new UnboundedChannelOptions()
