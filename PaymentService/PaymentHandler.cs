@@ -76,19 +76,12 @@ public class PaymentHandler
     private async Task Payment(Message message)
     {
         var rnd = new Random();
-
-        var tests = new[] {0, 0, 0, 0};
-        for (var i = 0; i < 1000; i++)
-        {
-            tests[rnd.Next(0, 3)]++;
-        }
-        _logger.Debug($"0:{tests[0]}, 1:{tests[1]}, 2:{tests[2]}, 3:{tests[3]}");
         
-        var delayRoll = rnd.Next(0, 3);
+        var delayRoll = rnd.Next(0, 5);
         _logger.Debug($"Randomizing delay: {delayRoll}");
         if (delayRoll == 0) await Task.Delay(rnd.Next(_minDelay + 1, _maxDelay * 1000), Token);
 
-        var resultRoll = rnd.Next(0, 3);
+        var resultRoll = rnd.Next(0, 5);
         _logger.Debug($"Randomizing result: {resultRoll}");
         SagaState result = resultRoll switch
         {
